@@ -6,6 +6,7 @@ import numpy as np
 import time
 import sys
 import traceback
+import datetime
 
 size_pic_with = 1920
 size_pic_high = 1080
@@ -19,10 +20,10 @@ def rescale_frame(frame, percent=75):
     dim = (width, height)
     return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
 def normal_rect(x1,y1,x2,y2):
-    x1 = x1 - 40
-    x2 = x2 + 40
-    y1 = y1 - 60
-    y2 = y2 + 60
+    x1 = x1 - delta_size_x
+    x2 = x2 + delta_size_x
+    y1 = y1 - delta_size_y
+    y2 = y2 + delta_size_y
     if x1 < 0:
         x1 = 0
     if y1 < 0:
@@ -74,7 +75,7 @@ while True:
            #win.set_image(resc_frame)
            #win.add_overlay(rects)
            t3=time.time()
-           print("Full Time: ",(t3-t1))
+           print("Full Time: ", (t3-t1))
         if cv2.waitKey(5) == ord('a'):
            break
     except:
