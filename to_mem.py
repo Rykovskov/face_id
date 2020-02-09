@@ -32,7 +32,7 @@ def normal_rect(x1,y1,x2,y2):
     return x1, y1, x2, y2
 
 cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
-win = dlib.image_window()
+#win = dlib.image_window()
 
 vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
 while True:
@@ -55,7 +55,7 @@ while True:
            #rects = dlib.rectangles()
            #rects.extend([d.rect for d in dets])
            #win.clear_overlay()
-           win.set_image(resc_frame)
+           #win.set_image(resc_frame)
            #win.add_overlay(rects)
            t3=time.time()
            print("Full Time: ",(t3-t1))
