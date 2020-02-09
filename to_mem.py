@@ -11,6 +11,7 @@ size_pic_with = 1920
 size_pic_high = 1080
 delta_size_x = 40
 delta_size_y = 60
+max_broken_frame = 100
 
 def rescale_frame(frame, percent=75):
     width = int(frame.shape[1] * percent/ 100)
@@ -33,12 +34,26 @@ def normal_rect(x1,y1,x2,y2):
     return x1, y1, x2, y2
 
 cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
-#win = dlib.image_window()
 
-vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
+try:
+    vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
+except:
+    print("I can not open source video!!!")
+    sys.exit()
+counter_broken_frame = 0
 while True:
     try:
-        ret, frame = vcap.read()
+        try:
+            ret, frame = vcap.read()
+            if frame is None:
+                counter_broken_frame = counter_broken_frame + 1
+                print(counter_broken_frame)
+        except:
+            counter_broken_frame = counter_broken_frame + 1
+            print(counter_broken_frame)
+        if counter_broken_frame > max_broken_frame:
+            print("Unable reading source video !!!")
+            sys.exit()
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         resc_frame = rescale_frame(rgb_frame, percent=60)
         t1 = time.time()
