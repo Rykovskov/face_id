@@ -11,7 +11,7 @@ import datetime
 size_pic_with = 1920
 size_pic_high = 1080
 delta_size_x = 40
-delta_size_y = 60
+delta_size_y = 90
 max_broken_frame = 100
 
 def rescale_frame(frame, percent=75):
@@ -56,7 +56,7 @@ while True:
             print("Unable reading source video !!!")
             sys.exit()
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        resc_frame = rescale_frame(rgb_frame, percent=60)
+        resc_frame = rescale_frame(rgb_frame, percent=80)
         t1 = time.time()
         dets = cnn_face_detector(resc_frame, 1)
         if len(dets) > 0:
@@ -64,7 +64,7 @@ while True:
                print("Detection {}: Left: {} Top: {} Right: {} Bottom: {} Confidence: {}".format(
                        i, d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom(), d.confidence))
                x_left, y_top, x_right, y_bottom = normal_rect(d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom())
-               face_img =frame[y_top:y_bottom, x_left:x_right]
+               face_img =resc_frame[y_top:y_bottom, x_left:x_right]
                filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S")+".jpg"
                cv2.imwrite(filename, face_img)
            t2 = time.time()
@@ -76,8 +76,6 @@ while True:
            #win.add_overlay(rects)
            t3=time.time()
            print("Full Time: ", (t3-t1))
-        if cv2.waitKey(5) == ord('a'):
-           break
     except:
         print('Ошибка:\n', traceback.format_exc())
         sys.exit()
