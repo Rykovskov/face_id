@@ -64,7 +64,7 @@ while True:
                print("Detection {}: Left: {} Top: {} Right: {} Bottom: {} Confidence: {}".format(
                        i, d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom(), d.confidence))
                x_left, y_top, x_right, y_bottom = normal_rect(d.rect.left(), d.rect.top(), d.rect.right(), d.rect.bottom())
-               face_img =frame[x_left:y_top, x_right:y_bottom]
+               face_img =frame[y_top:y_bottom, x_left:x_right]
                filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S")+".jpg"
                cv2.imwrite(filename, face_img)
            t2 = time.time()
