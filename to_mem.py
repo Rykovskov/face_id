@@ -67,6 +67,12 @@ while True:
                face_img =resc_frame[y_top:y_bottom, x_left:x_right]
                filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S")+".jpg"
                cv2.imwrite(filename, face_img)
+               filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + "_resc.jpg"
+               cv2.imwrite(filename, resc_frame)
+               filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + "_rgb.jpg"
+               cv2.imwrite(filename, rgb_frame)
+               filename = datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + "_org.jpg"
+               cv2.imwrite(filename, frame)
            t2 = time.time()
            print("Time:", (t2-t1))
            #rects = dlib.rectangles()
