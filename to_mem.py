@@ -80,3 +80,4 @@ while True:
            break
     except:
         print('Ошибка:\n', traceback.format_exc())
+        sys.exit()
