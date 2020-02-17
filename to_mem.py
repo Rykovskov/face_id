@@ -17,7 +17,7 @@ size_pic_with = 1920
 size_pic_high = 1080
 delta_size_x = 40
 delta_size_y = 90
-max_broken_frame = 100
+max_broken_frame = 1000
 
 ROOT_DIR = Path(".")
 CAR_DIR = os.path.join(ROOT_DIR, "car_img")
@@ -91,56 +91,90 @@ model = MaskRCNN(mode="inference", model_dir=MODEL_DIR, config=MaskRCNNConfig())
 # Load pre-trained model
 model.load_weights(COCO_MODEL_PATH, by_name=True)
 
+orb = cv2.ORB_create()
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
+
 try:
-    vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
+    #vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
+    vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
 except:
     print("I can not open source video!!!")
     sys.exit()
 counter_broken_frame = 0
+img_gray_car_old = None
+img_gray_human_old = None
+img_gray_pet_old = None
 while True:
-    try:
-        ret, frame = vcap.read()
-        if not ret:
-            counter_broken_frame = counter_broken_frame + 1
-            print(counter_broken_frame)
-            break
-        if counter_broken_frame > max_broken_frame:
-            print("Unable reading source video !!!")
-            sys.exit()
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        #resc_frame = rescale_frame(frame, percent=80)
-        t1 = time.time()
-        # Run the image through the Mask R-CNN model to get results.
-        results = model.detect([rgb_frame], verbose=0)
-        t2 = time.time()
-        print("Time detect all object:", (t2 - t1))
-        r = results[0]
-        car_boxes = get_car_boxes(r['rois'], r['class_ids'])
-        human_boxes = get_human_boxes(r['rois'], r['class_ids'])
-        pet_boxes = get_pet_boxes(r['rois'], r['class_ids'])
-        # Draw each box on the frame
-        for box in car_boxes:
-            print("Car: ", box)
-            y1, x1, y2, x2 = box
-            #Save image to disk
-            img = rgb_frame[y1:y2, x1:x2]
-            filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            cv2.imwrite(filename, img)
-        for box in human_boxes:
-            print("Human: ", box)
-            y1, x1, y2, x2 = box
-            # Save image to disk
-            img = rgb_frame[y1:y2, x1:x2]
-            filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            cv2.imwrite(filename, img)
-        for box in pet_boxes:
-            print("Pet: ", box)
-            y1, x1, y2, x2 = box
-            # Save image to disk
-            img = rgb_frame[y1:y2, x1:x2]
-            filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            cv2.imwrite(filename, img)
-
+    ret, frame = vcap.read()
+    if frame is None:
+        counter_broken_frame = counter_broken_frame + 1
+        print(counter_broken_frame)
+        vcap.release()
+        vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
+        continue
+    if counter_broken_frame > max_broken_frame:
+        print("Unable reading source video !!!")
+        sys.exit()
+    #rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #resc_frame = rescale_frame(frame, percent=80)
+    t1 = time.time()
+    # Run the image through the Mask R-CNN model to get results.
+    results = model.detect([rgb_frame], verbose=0)
+    t2 = time.time()
+    #print("Time detect all object:", (t2 - t1))
+    r = results[0]
+    car_boxes = get_car_boxes(r['rois'], r['class_ids'])
+    human_boxes = get_human_boxes(r['rois'], r['class_ids'])
+    pet_boxes = get_pet_boxes(r['rois'], r['class_ids'])
+    # Draw each box on the frame
+    for box in car_boxes:
+        print("Car: ", box)
+        y1, x1, y2, x2 = box
+        #Save image to disk
+        img = frame[y1:y2, x1:x2]
+        img_gray_car = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        if img_gray_car_old is not None:
+            t_car1 = time.time()
+            kp_img, des_img = orb.detectAndCompute(img_gray_car, None)
+            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_car_old, None)
+            matches = bf.match(des_img, des_img_old)
+            distance = len(matches)
+            print("distance -", distance)
+        filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        cv2.imwrite(filename, img)
+        img_gray_car_old = img_gray_car
+    for box in human_boxes:
+        print("Human: ", box)
+        y1, x1, y2, x2 = box
+        # Save image to disk
+        img = frame[y1:y2, x1:x2]
+        img_gray_human = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        if img_gray_human_old is not None:
+            t_car1 = time.time()
+            kp_img, des_img = orb.detectAndCompute(img_gray_human, None)
+            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_human_old, None)
+            matches = bf.match(des_img, des_img_old)
+            distance = len(matches)
+            print("distance -", distance)
+        filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        cv2.imwrite(filename, img)
+        img_gray_human_old = img_gray_human
+    for box in pet_boxes:
+        print("Pet: ", box)
+        y1, x1, y2, x2 = box
+        # Save image to disk
+        img = frame[y1:y2, x1:x2]
+        img_gray_pet = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        if img_gray_pet_old is not None:
+            t_car1 = time.time()
+            kp_img, des_img = orb.detectAndCompute(img_gray_pet, None)
+            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_pet_old, None)
+            matches = bf.match(des_img, des_img_old)
+            distance = len(matches)
+            print("distance -", distance)
+        filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        cv2.imwrite(filename, img)
+        img_gray_pet_old = img_gray_pet
         # dets = cnn_face_detector(resc_frame, 1)
         # if len(dets) > 0:
         #    for i, d in enumerate(dets):
@@ -163,8 +197,3 @@ while True:
         #    #win.clear_overlay()
         #    #win.set_image(resc_frame)
         #    #win.add_overlay(rects)
-        t3 = time.time()
-        print("Full Time: ", (t3-t1))
-    except:
-        print('Ошибка:\n', traceback.format_exc())
-        sys.exit()
