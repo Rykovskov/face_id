@@ -39,6 +39,7 @@ class MaskRCNNConfig(mrcnn.config.Config):
     NUM_CLASSES = 1 + 80  # COCO dataset has 80 classes + one background class
     DETECTION_MIN_CONFIDENCE = 0.6
 
+
 def get_car_boxes(boxes, class_ids):
     car_boxes = []
     for i, box in enumerate(boxes):
@@ -47,6 +48,8 @@ def get_car_boxes(boxes, class_ids):
             car_boxes.append(box)
 
     return np.array(car_boxes)
+
+
 def get_human_boxes(boxes, class_ids):
     human_boxes = []
     for i, box in enumerate(boxes):
@@ -54,6 +57,8 @@ def get_human_boxes(boxes, class_ids):
             human_boxes.append(box)
 
     return np.array(human_boxes)
+
+
 def get_pet_boxes(boxes, class_ids):
     pet_boxes = []
     for i, box in enumerate(boxes):
@@ -68,7 +73,9 @@ def rescale_frame(frame, percent=75):
     height = int(frame.shape[0] * percent/ 100)
     dim = (width, height)
     return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
-def normal_rect(x1,y1,x2,y2):
+
+
+def normal_rect(x1, y1, x2, y2):
     x1 = x1 - delta_size_x
     x2 = x2 + delta_size_x
     y1 = y1 - delta_size_y
@@ -82,6 +89,12 @@ def normal_rect(x1,y1,x2,y2):
     if y2 > size_pic_high:
         y2 = size_pic_high
     return x1, y1, x2, y2
+
+
+def compare_pic(pic1,pic2):
+    picture1_norm = pic1 / np.sqrt(np.sum(pic1 ** 2))
+    picture2_norm = pic2 / np.sqrt(np.sum(pic2 ** 2))
+    return np.sum(picture2_norm * picture1_norm)
 
 #Load Dlib
 #cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
@@ -134,14 +147,21 @@ while True:
         img = frame[y1:y2, x1:x2]
         img_gray_car = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         if img_gray_car_old is not None:
+            filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
-            kp_img, des_img = orb.detectAndCompute(img_gray_car, None)
-            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_car_old, None)
-            matches = bf.match(des_img, des_img_old)
-            distance = len(matches)
-            print("distance -", distance)
-        filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-        cv2.imwrite(filename, img)
+            # 1
+            dist = compare_pic(img_gray_car, img_gray_car_old)
+            t_car2 = time.time()
+            if dist < 0.8:
+                print("Ne Pohoge ", dist)
+                cv2.imwrite(filename, img)
+            # 2
+            #kp_img, des_img = orb.detectAndCompute(img_gray_car, None)
+            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_car_old, None)
+            #matches = bf.match(des_img, des_img_old)
+            #distance = len(matches)
+            #print("distance -", distance)
+            print("Time compare pic:", (t2 - t1))
         img_gray_car_old = img_gray_car
     for box in human_boxes:
         print("Human: ", box)
