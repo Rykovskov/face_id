@@ -157,6 +157,7 @@ while True:
             # 1
             dist = compare_pic(img_gray_car, img_gray_car_old)
             t_car2 = time.time()
+            print("Pohoge ", dist)
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img)
@@ -166,7 +167,7 @@ while True:
             #matches = bf.match(des_img, des_img_old)
             #distance = len(matches)
             #print("distance -", distance)
-            print("Time compare pic:", (t2 - t1))
+            print("Time compare pic:", (t_car2 - t_car1))
         img_gray_car_old = img_gray_car
     for box in human_boxes:
         print("Human: ", box)
