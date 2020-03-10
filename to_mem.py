@@ -132,7 +132,7 @@ while True:
     #resc_frame = rescale_frame(frame, percent=80)
     t1 = time.time()
     # Run the image through the Mask R-CNN model to get results.
-    results = model.detect([rgb_frame], verbose=0)
+    results = model.detect([frame], verbose=0)
     t2 = time.time()
     #print("Time detect all object:", (t2 - t1))
     r = results[0]
