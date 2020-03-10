@@ -170,14 +170,20 @@ while True:
         img = frame[y1:y2, x1:x2]
         img_gray_human = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         if img_gray_human_old is not None:
+            filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
-            kp_img, des_img = orb.detectAndCompute(img_gray_human, None)
-            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_human_old, None)
-            matches = bf.match(des_img, des_img_old)
-            distance = len(matches)
-            print("distance -", distance)
-        filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-        cv2.imwrite(filename, img)
+            # 1
+            dist = compare_pic(img_gray_human, img_gray_human_old)
+            t_car2 = time.time()
+            if dist < 0.8:
+                print("Ne Pohoge ", dist)
+                cv2.imwrite(filename, img)
+            #2
+            #kp_img, des_img = orb.detectAndCompute(img_gray_human, None)
+            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_human_old, None)
+            #matches = bf.match(des_img, des_img_old)
+            #distance = len(matches)
+            #print("distance -", distance)
         img_gray_human_old = img_gray_human
     for box in pet_boxes:
         print("Pet: ", box)
@@ -186,14 +192,20 @@ while True:
         img = frame[y1:y2, x1:x2]
         img_gray_pet = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         if img_gray_pet_old is not None:
+            filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
-            kp_img, des_img = orb.detectAndCompute(img_gray_pet, None)
-            kp_img_old, des_img_old = orb.detectAndCompute(img_gray_pet_old, None)
-            matches = bf.match(des_img, des_img_old)
-            distance = len(matches)
-            print("distance -", distance)
-        filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-        cv2.imwrite(filename, img)
+            # 1
+            dist = compare_pic(img_gray_pet, img_gray_pet_old)
+            t_car2 = time.time()
+            if dist < 0.8:
+                print("Ne Pohoge ", dist)
+                cv2.imwrite(filename, img)
+            # 2
+            #kp_img, des_img = orb.detectAndCompute(img_gray_pet, None)
+            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_pet_old, None)
+            #matches = bf.match(des_img, des_img_old)
+            #distance = len(matches)
+            #print("distance -", distance)
         img_gray_pet_old = img_gray_pet
         # dets = cnn_face_detector(resc_frame, 1)
         # if len(dets) > 0:
