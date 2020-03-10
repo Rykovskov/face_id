@@ -93,7 +93,7 @@ def normal_rect(x1, y1, x2, y2):
 
 def compare_pic(pic1,pic2):
     # Resize picture size two to one
-    size_x_pic2, size_y_pic2, color = pic2.shape
+    size_x_pic2, size_y_pic2 = pic2.shape
     dim = (size_x_pic2, size_y_pic2)
     resized = cv2.resize(pic1, dim, interpolation=cv2.INTER_AREA)
     # Compare
