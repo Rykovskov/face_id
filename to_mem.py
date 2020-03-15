@@ -160,7 +160,7 @@ while True:
             print("Pohoge ", dist)
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img)
+            cv2.imwrite(filename, img)
             # 2
             #kp_img, des_img = orb.detectAndCompute(img_gray_car, None)
             #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_car_old, None)
@@ -183,7 +183,7 @@ while True:
             t_car2 = time.time()
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img)
+            cv2.imwrite(filename, img)
             #2
             #kp_img, des_img = orb.detectAndCompute(img_gray_human, None)
             #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_human_old, None)
@@ -205,7 +205,7 @@ while True:
             t_car2 = time.time()
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img)
+            cv2.imwrite(filename, img)
             # 2
             #kp_img, des_img = orb.detectAndCompute(img_gray_pet, None)
             #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_pet_old, None)
