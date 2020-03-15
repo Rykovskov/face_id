@@ -19,6 +19,7 @@ size_pic_high = 1080
 delta_size_x = 40
 delta_size_y = 90
 max_broken_frame = 1000
+min_dist_pic = 0.6
 
 ROOT_DIR = Path(".")
 CAR_DIR = os.path.join(ROOT_DIR, "car_img")
@@ -147,7 +148,7 @@ while True:
             dist = compare_pic.Get_Difference(img_car, img_car_old)
             t_car2 = time.time()
             print("Pohoge ", dist)
-            if dist < 0.8:
+            if dist < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_car)
             print("Time compare pic:", (t_car2 - t_car1))
@@ -163,7 +164,7 @@ while True:
             # 1
             dist = compare_pic.Get_Difference(img_human, img_human_old)
             t_car2 = time.time()
-            if dist < 0.8:
+            if dist < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_human)
         img_human_old = img_human
@@ -178,7 +179,7 @@ while True:
             # 1
             dist = compare_pic.Get_Difference(img_pet, img_pet_old)
             t_car2 = time.time()
-            if dist < 0.8:
+            if dist < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_pet)
         img_pet_old = img_pet
