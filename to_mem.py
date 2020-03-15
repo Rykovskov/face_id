@@ -91,17 +91,6 @@ def normal_rect(x1, y1, x2, y2):
         y2 = size_pic_high
     return x1, y1, x2, y2
 
-
-def compare_pic(pic1,pic2):
-    # Resize picture size two to one
-    size_x_pic2, size_y_pic2 = pic2.shape
-    dim = (size_y_pic2, size_x_pic2)
-    resized = cv2.resize(pic1, dim, interpolation=cv2.INTER_AREA)
-    # Compare
-    picture1_norm = resized / np.sqrt(np.sum(resized ** 2))
-    picture2_norm = pic2 / np.sqrt(np.sum(pic2 ** 2))
-    return np.sum(picture2_norm * picture1_norm)
-
 #Load Dlib
 #cnn_face_detector = dlib.cnn_face_detection_model_v1("mmod_human_face_detector.dat")
 
