@@ -109,9 +109,9 @@ except:
     print("I can not open source video!!!")
     sys.exit()
 counter_broken_frame = 0
-img_car_old = np.random.rand(430, 200)
-img_human_old = np.random.rand(430, 200)
-img_pet_old = np.random.rand(430, 200)
+img_car_old = np.full((300, 400, 3), 130, dtype=np.uint8)
+img_human_old = np.full((300, 400, 3), 130, dtype=np.uint8)
+img_pet_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 while True:
     ret, frame = vcap.read()
     if frame is None:
