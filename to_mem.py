@@ -12,6 +12,7 @@ import mrcnn.config
 import mrcnn.utils
 from pathlib import Path
 from mrcnn.model import MaskRCNN
+import compare_pic
 
 size_pic_with = 1920
 size_pic_high = 1080
@@ -119,9 +120,9 @@ except:
     print("I can not open source video!!!")
     sys.exit()
 counter_broken_frame = 0
-img_gray_car_old = None
-img_gray_human_old = None
-img_gray_pet_old = None
+img_car_old = np.random.rand(430, 200)
+img_human_old = np.random.rand(430, 200)
+img_pet_old = np.random.rand(430, 200)
 while True:
     ret, frame = vcap.read()
     if frame is None:
@@ -149,70 +150,49 @@ while True:
         print("Car: ", box)
         y1, x1, y2, x2 = box
         #Save image to disk
-        img = frame[y1:y2, x1:x2]
-        img_gray_car = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        if img_gray_car_old is not None:
+        img_car = frame[y1:y2, x1:x2]
+        if img_car_old is not None:
             filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
             # 1
-            dist = compare_pic(img_gray_car, img_gray_car_old)
+            dist = compare_pic.CompareHash(img_car, img_car_old)
             t_car2 = time.time()
             print("Pohoge ", dist)
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-            cv2.imwrite(filename, img)
-            # 2
-            #kp_img, des_img = orb.detectAndCompute(img_gray_car, None)
-            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_car_old, None)
-            #matches = bf.match(des_img, des_img_old)
-            #distance = len(matches)
-            #print("distance -", distance)
+                cv2.imwrite(filename, img_car)
             print("Time compare pic:", (t_car2 - t_car1))
-        img_gray_car_old = img_gray_car
+        img_car_old = img_car
     for box in human_boxes:
         print("Human: ", box)
         y1, x1, y2, x2 = box
         # Save image to disk
-        img = frame[y1:y2, x1:x2]
-        img_gray_human = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        if img_gray_human_old is not None:
+        img_human = frame[y1:y2, x1:x2]
+        if img_human_old is not None:
             filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
             # 1
-            dist = compare_pic(img_gray_human, img_gray_human_old)
+            dist = compare_pic.CompareHash(img_human, img_human_old)
             t_car2 = time.time()
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-            cv2.imwrite(filename, img)
-            #2
-            #kp_img, des_img = orb.detectAndCompute(img_gray_human, None)
-            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_human_old, None)
-            #matches = bf.match(des_img, des_img_old)
-            #distance = len(matches)
-            #print("distance -", distance)
-        img_gray_human_old = img_gray_human
+                cv2.imwrite(filename, img_human)
+        img_human_old = img_human
     for box in pet_boxes:
         print("Pet: ", box)
         y1, x1, y2, x2 = box
         # Save image to disk
-        img = frame[y1:y2, x1:x2]
-        img_gray_pet = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        if img_gray_pet_old is not None:
+        img_pet = frame[y1:y2, x1:x2]
+        if img_pet_old is not None:
             filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
             # 1
-            dist = compare_pic(img_gray_pet, img_gray_pet_old)
+            dist = compare_pic.CompareHash(img_pet, img_pet_old)
             t_car2 = time.time()
             if dist < 0.8:
                 print("Ne Pohoge ", dist)
-            cv2.imwrite(filename, img)
-            # 2
-            #kp_img, des_img = orb.detectAndCompute(img_gray_pet, None)
-            #kp_img_old, des_img_old = orb.detectAndCompute(img_gray_pet_old, None)
-            #matches = bf.match(des_img, des_img_old)
-            #distance = len(matches)
-            #print("distance -", distance)
-        img_gray_pet_old = img_gray_pet
+                cv2.imwrite(filename, img_pet)
+        img_pet_old = img_pet
         # dets = cnn_face_detector(resc_frame, 1)
         # if len(dets) > 0:
         #    for i, d in enumerate(dets):
