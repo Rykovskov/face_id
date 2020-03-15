@@ -32,3 +32,9 @@ def CompareHash(hash1, hash2):
          count = 1000
 
     return (1000-count)/1000
+
+
+def Get_Difference(img1, img2):
+    hash1 = CalcImageHash(img1)
+    hash2 = CalcImageHash(img2)
+    return CompareHash(hash1, hash2)
