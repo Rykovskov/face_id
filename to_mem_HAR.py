@@ -87,10 +87,10 @@ while True:
         if img_car_old is not None:
             filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_car1 = time.time()
-            dist = compare_pic.Get_Difference(img_car, img_car_old)
+            #dist = compare_pic.Get_Difference(img_car, img_car_old)
             t_car2 = time.time()
             print("Pohoge ", dist)
-            if dist < min_dist_pic:
+            if 0 < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_car)
             print("Time compare pic:", (t_car2 - t_car1))
@@ -103,9 +103,9 @@ while True:
         if img_human_old is not None:
             filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_human1 = time.time()
-            dist = compare_pic.Get_Difference(img_human, img_human_old)
+            #dist = compare_pic.Get_Difference(img_human, img_human_old)
             t_human2 = time.time()
-            if dist < min_dist_pic:
+            if 0 < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_human)
         img_human_old = img_human
@@ -117,9 +117,9 @@ while True:
         if img_pet_old is not None:
             filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
             t_pet1 = time.time()
-            dist = compare_pic.Get_Difference(img_pet, img_pet_old)
+            #dist = compare_pic.Get_Difference(img_pet, img_pet_old)
             t_pet2 = time.time()
-            if dist < min_dist_pic:
+            if 0 < min_dist_pic:
                 print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_pet)
         img_pet_old = img_pet
