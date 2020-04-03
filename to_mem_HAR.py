@@ -89,7 +89,6 @@ while True:
             t_car1 = time.time()
             #dist = compare_pic.Get_Difference(img_car, img_car_old)
             t_car2 = time.time()
-            print("Pohoge ", dist)
             if 0 < min_dist_pic:
                 #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_car)
