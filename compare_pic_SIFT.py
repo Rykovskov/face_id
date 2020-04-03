@@ -5,7 +5,8 @@ import argparse
 import logging
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
+from scipy.spatial import distance
+import dlib
 
 # Initiate SIFT detector
 sift = cv2.xfeatures2d.SIFT_create()
@@ -16,26 +17,20 @@ def calculate_SIFT(img):
   kp, des = sift.detectAndCompute(img,None)
   return kp, des
 
+def CompareHash(hash1, hash2):
+    l = len(hash1)
+    i = 0
+    count = 0
+    while i < l:
+        if hash1[i] != hash2[i]:
+            count = count + 1
+        i = i + 1
+    if count > 1000:
+         count = 1000
 
-def knn_match(des1, des2, nn_ratio=0.7):
-    # FLANN parameters
-    index_params = dict(algorithm=0, trees=5)
-    search_params = dict(checks=50)
+    return (1000-count)/1000
 
-    flann = cv2.FlannBasedMatcher(index_params, search_params)
-
-    # Match features from each image
-    matches = flann.knnMatch(des1, des2, k=2)
-
-    # store only the good matches as per Lowe's ratio test.
-    good = []
-    for m, n in matches:
-        if m.distance < nn_ratio * n.distance:
-            good.append(m)
-
-    return good
-
-
-# calculate the angle with the horizontal
-def angle_horizontal(v):
-    return -np.arctan2(v[1],v[0])
+def Get_Difference(img1, img2):
+    kp_img1, des_img1 = calculate_SIFT(img1)
+    kp_img2, des_img2 = calculate_SIFT(img2)
+    return CompareHash(hash1, hash2)

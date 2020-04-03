@@ -51,8 +51,8 @@ def normal_rect(x1, y1, x2, y2):
     return x1, y1, x2, y2
 
 try:
-    #vcap = cv2.VideoCapture("rtsp://admin@192.168.21.168:554/user=admin&password=&channel=1&stream=0")
-    vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
+    vcap = cv2.VideoCapture("rtsp://admin@192.168.20.168:554/user=admin&password=&channel=1&stream=0")
+    #vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
 except:
     print("I can not open source video!!!")
     sys.exit()
@@ -68,7 +68,7 @@ while True:
         counter_broken_frame = counter_broken_frame + 1
         print(counter_broken_frame)
         vcap.release()
-        vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
+        vcap = cv2.VideoCapture("rtsp://admin@192.168.20.168:554/user=admin&password=&channel=1&stream=0")
         continue
     if counter_broken_frame > max_broken_frame:
         print("Unable reading source video !!!")
