@@ -91,9 +91,9 @@ while True:
             t_car2 = time.time()
             print("Pohoge ", dist)
             if 0 < min_dist_pic:
-                print("Ne Pohoge ", dist)
+                #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_car)
-            print("Time compare pic:", (t_car2 - t_car1))
+            print("Time compare pic car:", (t_car2 - t_car1))
         img_car_old = img_car
 
     for x1, y1, x2, y2  in human_boxes:
@@ -106,8 +106,9 @@ while True:
             #dist = compare_pic.Get_Difference(img_human, img_human_old)
             t_human2 = time.time()
             if 0 < min_dist_pic:
-                print("Ne Pohoge ", dist)
+                #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_human)
+            print("Time compare pic human:", (t_human2 - t_human1))
         img_human_old = img_human
 
     for x1, y1, x2, y2  in pet_boxes:
@@ -120,7 +121,8 @@ while True:
             #dist = compare_pic.Get_Difference(img_pet, img_pet_old)
             t_pet2 = time.time()
             if 0 < min_dist_pic:
-                print("Ne Pohoge ", dist)
+                #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_pet)
+            print("Time compare pic pet: ", (t_pet2 - t_pet1))
         img_pet_old = img_pet
 
