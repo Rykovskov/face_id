@@ -77,51 +77,44 @@ while True:
     #resc_frame = rescale_frame(frame, percent=80)
     t1 = time.time()
     frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    car_boxes = car_cascade.detectMultiScale(frame_gray, 1.1, 1)
-    human_boxes = human_cascade.detectMultiScale(frame_gray, 1.1, 1)
-    pet_boxes = dog_cascade.detectMultiScale(frame_gray, 1.1, 1)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.equalizeHist(gray)
+    car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
+    human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
+    pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
 
     for x1, y1, x2, y2 in car_boxes:
-        print("Car ! ")
+        print("Car ! ", x1, y1, x2, y2)
         img_car = frame[y1:y2, x1:x2]
         if img_car_old is not None:
             filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            t_car1 = time.time()
             #dist = compare_pic.Get_Difference(img_car, img_car_old)
-            t_car2 = time.time()
             if 0 < min_dist_pic:
                 #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_car)
-            print("Time compare pic car:", (t_car2 - t_car1))
         img_car_old = img_car
 
     for x1, y1, x2, y2  in human_boxes:
-        print("Human: ", box)
+        print("Human: ", x1, y1, x2, y2)
         # Save image to disk
         img_human = frame[y1:y2, x1:x2]
         if img_human_old is not None:
             filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            t_human1 = time.time()
             #dist = compare_pic.Get_Difference(img_human, img_human_old)
-            t_human2 = time.time()
             if 0 < min_dist_pic:
                 #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_human)
-            print("Time compare pic human:", (t_human2 - t_human1))
         img_human_old = img_human
 
     for x1, y1, x2, y2  in pet_boxes:
-        print("Pet: ", box)
+        print("Pet: ", x1, y1, x2, y2)
         # Save image to disk
         img_pet = frame[y1:y2, x1:x2]
         if img_pet_old is not None:
             filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            t_pet1 = time.time()
             #dist = compare_pic.Get_Difference(img_pet, img_pet_old)
-            t_pet2 = time.time()
             if 0 < min_dist_pic:
                 #print("Ne Pohoge ", dist)
                 cv2.imwrite(filename, img_pet)
-            print("Time compare pic pet: ", (t_pet2 - t_pet1))
         img_pet_old = img_pet
 
