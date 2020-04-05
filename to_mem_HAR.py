@@ -31,7 +31,7 @@ dog_cascade = cv2.CascadeClassifier(cascade_dog)
 
 def detect(img, cascade):
     rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
-                                     flags=cv.CASCADE_SCALE_IMAGE)
+                                     flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
         return []
     rects[:,2:] += rects[:,:2]
