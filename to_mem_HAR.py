@@ -29,6 +29,20 @@ human_cascade = cv2.CascadeClassifier(cascade_human)
 cascade_dog = 'haarcascade_frontalface_alt.xml'
 dog_cascade = cv2.CascadeClassifier(cascade_dog)
 
+def detect(img, cascade):
+    rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
+                                     flags=cv.CASCADE_SCALE_IMAGE)
+    if len(rects) == 0:
+        return []
+    rects[:,2:] += rects[:,:2]
+    return rects
+
+
+def draw_rects(img, rects, color):
+    for x1, y1, x2, y2 in rects:
+        cv2.rectangle(img, (x1, y1), (x2, y2), color, 2)
+
+
 def rescale_frame(frame, percent=75):
     width = int(frame.shape[1] * percent/ 100)
     height = int(frame.shape[0] * percent/ 100)
@@ -73,48 +87,22 @@ while True:
     if counter_broken_frame > max_broken_frame:
         print("Unable reading source video !!!")
         sys.exit()
-    #rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    #resc_frame = rescale_frame(frame, percent=80)
     t1 = time.time()
-    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
-    car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
-    human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
-    pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
+    #car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
+    #human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
+    #pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
 
-    for x1, y1, x2, y2 in car_boxes:
+    rects = detect(gray, car_cascade)
+    vis = frame.copy()
+
+    for x1, y1, x2, y2 in rects:
+        filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
         print("Car ! ", x1, y1, x2, y2)
         img_car = frame[y1:y2, x1:x2]
-        if img_car_old is not None:
-            filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            #dist = compare_pic.Get_Difference(img_car, img_car_old)
-            if 0 < min_dist_pic:
-                #print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img_car)
-        img_car_old = img_car
-
-    for x1, y1, x2, y2  in human_boxes:
-        print("Human: ", x1, y1, x2, y2)
-        # Save image to disk
-        img_human = frame[y1:y2, x1:x2]
-        if img_human_old is not None:
-            filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            #dist = compare_pic.Get_Difference(img_human, img_human_old)
-            if 0 < min_dist_pic:
-                #print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img_human)
-        img_human_old = img_human
-
-    for x1, y1, x2, y2  in pet_boxes:
-        print("Pet: ", x1, y1, x2, y2)
-        # Save image to disk
-        img_pet = frame[y1:y2, x1:x2]
-        if img_pet_old is not None:
-            filename = os.path.join(PET_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-            #dist = compare_pic.Get_Difference(img_pet, img_pet_old)
-            if 0 < min_dist_pic:
-                #print("Ne Pohoge ", dist)
-                cv2.imwrite(filename, img_pet)
-        img_pet_old = img_pet
+        roi = gray[y1:y2, x1:x2]
+        vis_roi = vis[y1:y2, x1:x2]
+        draw_rects(vis, rects, (0, 255, 0))
+        cv2.imwrite(filename, vis_roi)
 
