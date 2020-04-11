@@ -106,6 +106,6 @@ while True:
         vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
         cv2.imwrite(filename, vis_roi)
-        cv2.imwrite('full_'+filename1, vis)
+        cv2.imwrite(filename1, vis)
 
 
