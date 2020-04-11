@@ -95,7 +95,7 @@ while True:
     #pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
 
     #rects = detect(gray, car_cascade)
-    rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(430, 430), flags=cv2.CASCADE_SCALE_IMAGE)
+    rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 130), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
         rects = []
     else:
