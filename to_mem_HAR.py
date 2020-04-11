@@ -99,12 +99,13 @@ while True:
 
     for x1, y1, x2, y2 in rects:
         filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        filename1 = os.path.join(CAR_DIR, 'full_'+datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
         print("Car ! ", x1, y1, x2, y2)
         img_car = frame[y1:y2, x1:x2]
         roi = gray[y1:y2, x1:x2]
         vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
         cv2.imwrite(filename, vis_roi)
-        cv2.imwrite('full_'+filename, vis)
+        cv2.imwrite('full_'+filename1, vis)
 
 
