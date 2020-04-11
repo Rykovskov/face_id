@@ -104,6 +104,6 @@ while True:
         roi = gray[y1:y2, x1:x2]
         vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
-        cv2.imwrite(filename, vis)
+        cv2.imwrite(filename, vis_roi)
 
 
