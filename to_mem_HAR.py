@@ -30,7 +30,7 @@ cascade_dog = 'haarcascade_frontalface_alt.xml'
 dog_cascade = cv2.CascadeClassifier(cascade_dog)
 
 def detect(img, cascade):
-    rects = cascade.detectMultiScale(img, scaleFactor=1.3, minNeighbors=4, minSize=(30, 30),
+    rects = cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=4, minSize=(130, 130),
                                      flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
         return []
