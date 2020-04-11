@@ -90,12 +90,15 @@ while True:
     t1 = time.time()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
+    filename1 = os.path.join(CAR_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+    cv2.imwrite(filename1, frame)
     #car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
     #human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
     #pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
 
     #rects = detect(gray, car_cascade)
-    rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 130), flags=cv2.CASCADE_SCALE_IMAGE)
+    #Car
+    rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
         rects = []
     else:
@@ -103,13 +106,28 @@ while True:
     vis = frame.copy()
     for x1, y1, x2, y2 in rects:
         filename = os.path.join(CAR_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-        filename1 = os.path.join(CAR_DIR, 'full_'+datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
         print("Car ! ", x1, y1, x2, y2)
         img_car = frame[y1:y2, x1:x2]
-        roi = gray[y1:y2, x1:x2]
+        #roi = gray[y1:y2, x1:x2]
         #vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
         cv2.imwrite(filename, img_car)
-        cv2.imwrite(filename1, vis)
+    #Human
+    rects = human_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
+                                         flags=cv2.CASCADE_SCALE_IMAGE)
+    if len(rects) == 0:
+        rects = []
+    else:
+        rects[:, 2:] += rects[:, :2]
+    vis = frame.copy()
+    for x1, y1, x2, y2 in rects:
+        filename = os.path.join(HUMAN_DIR, datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        print("Human ! ", x1, y1, x2, y2)
+        img_human = frame[y1:y2, x1:x2]
+        #roi = gray[y1:y2, x1:x2]
+        # vis_roi = vis[y1:y2, x1:x2]
+        draw_rects(vis, rects, (0, 255, 0))
+        cv2.imwrite(filename, img_human)
+
 
 
