@@ -9,6 +9,7 @@ import traceback
 import datetime
 import compare_pic
 from pathlib import Path
+import imutils
 
 size_pic_with = 1920
 size_pic_high = 1080
@@ -64,6 +65,11 @@ def normal_rect(x1, y1, x2, y2):
         y2 = size_pic_high
     return x1, y1, x2, y2
 
+def variance_of_laplacian(image):
+	# compute the Laplacian of the image and then return the focus
+	# measure, which is simply the variance of the Laplacian
+	return cv2.Laplacian(image, cv2.CV_64F).var()
+
 try:
     vcap = cv2.VideoCapture("rtsp://admin@192.168.20.168:554/user=admin&password=&channel=1&stream=0")
     #vcap = cv2.VideoCapture("rtsp://admin@192.168.20.93:554/11")
@@ -90,6 +96,9 @@ while True:
     t1 = time.time()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
+    fm = variance_of_laplacian(gray)
+    font = cv2.FONT_HERSHEY_DUPLEX
+    cv2.putText(frames, fm, (200, 200), font, 0.5, (0, 0, 255), 1)
     filename1 = os.path.join(CAR_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
     cv2.imwrite(filename1, frame)
     #car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
