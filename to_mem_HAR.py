@@ -97,9 +97,11 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     fm = variance_of_laplacian(gray)
+    if fm is None:
+        fm = 'None'
     font = cv2.FONT_HERSHEY_DUPLEX
-    print("fn - ", fm)
-    cv2.putText(frame, "Hello World!!!", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+    #print("fn - ", fm)
+    cv2.putText(frame, fm, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
     #cv2.putText(frame, fm, (200, 200), font, 0.5, (0, 0, 255), 1)
     filename1 = os.path.join(CAR_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
     cv2.imwrite(filename1, frame)
