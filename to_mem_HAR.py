@@ -97,15 +97,10 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     fm = variance_of_laplacian(gray)
-    if fm is None:
-        fm = 'None'
+    if fm > 19000.00:
+        continue
     font = cv2.FONT_HERSHEY_DUPLEX
     ss = str(fm) + ' gg'
-    #car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
-    #human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
-    #pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
-
-    #rects = detect(gray, car_cascade)
     #Car
     rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
