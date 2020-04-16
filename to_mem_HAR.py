@@ -100,7 +100,7 @@ while True:
     if fm is None:
         fm = 'None'
     font = cv2.FONT_HERSHEY_DUPLEX
-    ss = fm + ' gg'
+    ss = str(fm) + ' gg'
     print(ss)
     #print("fn - ", fm)
     cv2.putText(frame, ss, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
