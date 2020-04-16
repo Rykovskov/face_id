@@ -101,12 +101,6 @@ while True:
         fm = 'None'
     font = cv2.FONT_HERSHEY_DUPLEX
     ss = str(fm) + ' gg'
-    print(ss)
-    #print("fn - ", fm)
-    cv2.putText(frame, ss, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
-    #cv2.putText(frame, fm, (200, 200), font, 0.5, (0, 0, 255), 1)
-    filename1 = os.path.join(CAR_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
-    cv2.imwrite(filename1, frame)
     #car_boxes = car_cascade.detectMultiScale(gray, 1.1, 1)
     #human_boxes = human_cascade.detectMultiScale(gray, 1.1, 1)
     #pet_boxes = dog_cascade.detectMultiScale(gray, 1.1, 1)
@@ -127,6 +121,9 @@ while True:
         #vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
         cv2.imwrite(filename, img_car)
+        cv2.putText(frame, ss, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        filename1 = os.path.join(CAR_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        cv2.imwrite(filename1, frame)
     #Human
     rects = human_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
                                          flags=cv2.CASCADE_SCALE_IMAGE)
@@ -143,6 +140,9 @@ while True:
         # vis_roi = vis[y1:y2, x1:x2]
         draw_rects(vis, rects, (0, 255, 0))
         cv2.imwrite(filename, img_human)
+        cv2.putText(frame, ss, (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        filename1 = os.path.join(HUMAN_DIR, 'full_' + datetime.datetime.now().strftime("%d%m%Y__%H_%M_%S") + ".jpg")
+        cv2.imwrite(filename1, frame)
 
 
 
