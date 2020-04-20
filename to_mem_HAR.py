@@ -18,7 +18,7 @@ delta_size_y = 90
 max_broken_frame = 1000
 min_dist_pic = 0.6
 
-ROOT_DIR = Path(".")
+ROOT_DIR = Path("/mnt/v1/TF")
 CAR_DIR = os.path.join(ROOT_DIR, "car_img")
 HUMAN_DIR = os.path.join(ROOT_DIR, "human_img")
 PET_DIR = os.path.join(ROOT_DIR, "pet_img")
