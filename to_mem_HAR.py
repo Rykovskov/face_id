@@ -97,8 +97,8 @@ while True:
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
     fm = variance_of_laplacian(gray)
-    if fm > 19000.00:
-        continue
+    #if fm > 19000.00:
+    #    continue
     font = cv2.FONT_HERSHEY_DUPLEX
     ss = str(fm) + ' gg'
     #Car
