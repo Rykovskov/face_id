@@ -139,7 +139,7 @@ while True:
         day_str = datetime.datetime.now().strftime("%d")
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
-            os.mkdir(fullPath)
+            os.makedirs(fullPath)
         filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Car ! ", x1, y1, x2, y2)
