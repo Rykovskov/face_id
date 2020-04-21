@@ -11,6 +11,17 @@ import compare_pic
 from pathlib import Path
 import imutils
 import psycopg2
+from psycopg2.extensions import register_adapter, AsIs
+
+
+def addapt_numpy_float64(numpy_float64):
+    return AsIs(numpy_float64)
+
+
+def addapt_numpy_int64(numpy_int64):
+    return AsIs(numpy_int64)
+register_adapter(np.float64, addapt_numpy_float64)
+register_adapter(np.int64, addapt_numpy_int64)
 
 size_pic_with = 1920
 size_pic_high = 1080
