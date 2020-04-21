@@ -41,7 +41,7 @@ human_cascade2 = cv2.CascadeClassifier(cascade_human2)
 cascade_dog = 'haarcascade_frontalface_alt.xml'
 dog_cascade = cv2.CascadeClassifier(cascade_dog)
 
-conn = psycopg2.connect(dbname='trafik', user='max', password='tv60hu02', host='192.168.21.48')
+conn = psycopg2.connect(dbname='trafik', user='max', password='tv60hu02', host='localhost')
 sql_insert_actions = """insert into actions (dt_actions, patch_to_pic, name_pic) values (%s, %s, %s)  RETURNING id_actions;"""
 sql_insert_rects = """insert into rectangles (id_actions, x1, x2, y1, y2) values (%s, %s, %s, %s, %s);"""
 
