@@ -25,7 +25,6 @@ cascade_car = 'cars.xml'
 car_cascade = cv2.CascadeClassifier(cascade_car)
 cascade_car1 = 'cas1.xml'
 
-car_cascade2 = cv2.CascadeClassifier(cascade_car2)
 cascade_car3 = 'cas3.xml'
 car_cascade3 = cv2.CascadeClassifier(cascade_car3)
 cascade_car4 = 'cas4.xml'
