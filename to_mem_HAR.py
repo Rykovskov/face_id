@@ -207,7 +207,7 @@ while True:
         conn.commit()
         cur.close()
     #Pets
-    rects = cascade_dog.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
+    rects = dog_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
                                          flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
         rects = []
