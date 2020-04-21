@@ -24,8 +24,7 @@ ROOT_DIR = Path("/home/max/base")
 cascade_car = 'cars.xml'
 car_cascade = cv2.CascadeClassifier(cascade_car)
 cascade_car1 = 'cas1.xml'
-car_cascade1 = cv2.CascadeClassifier(cascade_car1)
-cascade_car2 = 'cas2.xml'
+
 car_cascade2 = cv2.CascadeClassifier(cascade_car2)
 cascade_car3 = 'cas3.xml'
 car_cascade3 = cv2.CascadeClassifier(cascade_car3)
@@ -116,18 +115,13 @@ while True:
         rects = car_cascade1.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
                                              flags=cv2.CASCADE_SCALE_IMAGE)
         if len(rects) == 0:
-            rects = car_cascade2.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
-                                                  flags=cv2.CASCADE_SCALE_IMAGE)
-            if len(rects) == 0:
-                rects = car_cascade3.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+            rects = car_cascade3.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
                                                       flags=cv2.CASCADE_SCALE_IMAGE)
-                if len(rects) == 0:
-                    rects = car_cascade4.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+            if len(rects) == 0:
+                rects = car_cascade4.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
                                                           flags=cv2.CASCADE_SCALE_IMAGE)
-                    if len(rects) == 0:
-                        rects = []
-                    else:
-                        rects[:, 2:] += rects[:, :2]
+                if len(rects) == 0:
+                    rects = []
                 else:
                     rects[:, 2:] += rects[:, :2]
             else:
