@@ -23,8 +23,23 @@ ROOT_DIR = Path("/home/max/base")
 
 cascade_car = 'cars.xml'
 car_cascade = cv2.CascadeClassifier(cascade_car)
+cascade_car1 = 'cas1.xml'
+car_cascade1 = cv2.CascadeClassifier(cascade_car1)
+cascade_car2 = 'cas2.xml'
+car_cascade2 = cv2.CascadeClassifier(cascade_car2)
+cascade_car3 = 'cas3.xml'
+car_cascade3 = cv2.CascadeClassifier(cascade_car3)
+cascade_car4 = 'cas4.xml'
+car_cascade4 = cv2.CascadeClassifier(cascade_car4)
+
 cascade_human = 'haarcascade_fullbody.xml'
 human_cascade = cv2.CascadeClassifier(cascade_human)
+cascade_human1 = 'haarcascade_frontalface_alt_tree.xml'
+human_cascade1 = cv2.CascadeClassifier(cascade_human1)
+cascade_human2 = 'haarcascade_frontalface_alt.xml'
+human_cascade2 = cv2.CascadeClassifier(cascade_human2)
+
+
 cascade_dog = 'haarcascade_frontalface_alt.xml'
 dog_cascade = cv2.CascadeClassifier(cascade_dog)
 
@@ -98,7 +113,27 @@ while True:
     #Car
     rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
-        rects = []
+        rects = car_cascade1.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+                                             flags=cv2.CASCADE_SCALE_IMAGE)
+        if len(rects) == 0:
+            rects = car_cascade2.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+                                                  flags=cv2.CASCADE_SCALE_IMAGE)
+            if len(rects) == 0:
+                rects = car_cascade3.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+                                                      flags=cv2.CASCADE_SCALE_IMAGE)
+                if len(rects) == 0:
+                    rects = car_cascade4.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
+                                                          flags=cv2.CASCADE_SCALE_IMAGE)
+                    if len(rects) == 0:
+                        rects = []
+                    else:
+                        rects[:, 2:] += rects[:, :2]
+                else:
+                    rects[:, 2:] += rects[:, :2]
+            else:
+                rects[:, 2:] += rects[:, :2]
+        else:
+            rects[:, 2:] += rects[:, :2]
     else:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
@@ -132,7 +167,17 @@ while True:
     rects = human_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
                                          flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
-        rects = []
+        rects = human_cascade1.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
+                                               flags=cv2.CASCADE_SCALE_IMAGE)
+        if len(rects) == 0:
+            rects = human_cascade2.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
+                                                    flags=cv2.CASCADE_SCALE_IMAGE)
+            if len(rects) == 0:
+                rects = []
+            else:
+                rects[:, 2:] += rects[:, :2]
+        else:
+            rects[:, 2:] += rects[:, :2]
     else:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
