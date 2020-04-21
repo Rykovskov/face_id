@@ -24,6 +24,7 @@ ROOT_DIR = Path("/home/max/base")
 cascade_car = 'cars.xml'
 car_cascade = cv2.CascadeClassifier(cascade_car)
 cascade_car1 = 'cas1.xml'
+car_cascade1 = cv2.CascadeClassifier(cascade_car1)
 
 cascade_car3 = 'cas3.xml'
 car_cascade3 = cv2.CascadeClassifier(cascade_car3)
