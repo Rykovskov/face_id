@@ -34,13 +34,6 @@ ROOT_DIR = Path("/home/max/base")
 
 cascade_car = 'cars.xml'
 car_cascade = cv2.CascadeClassifier(cascade_car)
-cascade_car1 = 'cas1.xml'
-car_cascade1 = cv2.CascadeClassifier(cascade_car1)
-
-cascade_car3 = 'cas3.xml'
-car_cascade3 = cv2.CascadeClassifier(cascade_car3)
-cascade_car4 = 'cas4.xml'
-car_cascade4 = cv2.CascadeClassifier(cascade_car4)
 
 cascade_human = 'haarcascade_fullbody.xml'
 human_cascade = cv2.CascadeClassifier(cascade_human)
@@ -123,22 +116,7 @@ while True:
     #Car
     rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
-        rects = car_cascade1.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
-                                             flags=cv2.CASCADE_SCALE_IMAGE)
-        if len(rects) == 0:
-            rects = car_cascade3.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
-                                                      flags=cv2.CASCADE_SCALE_IMAGE)
-            if len(rects) == 0:
-                rects = car_cascade4.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330),
-                                                          flags=cv2.CASCADE_SCALE_IMAGE)
-                if len(rects) == 0:
-                    rects = []
-                else:
-                    rects[:, 2:] += rects[:, :2]
-            else:
-                rects[:, 2:] += rects[:, :2]
-        else:
-            rects[:, 2:] += rects[:, :2]
+         rects = []
     else:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
@@ -194,18 +172,19 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
-        fullPath = os.path.join(fullPath, filename)
         print("Human ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
         cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
-        cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename,))
         id_of_new_row = cur.fetchone()[0]
         cur.execute(sql_insert_rects, (id_of_new_row, x1, x2, y1, y2,))
         conn.commit()
         cur.close()
+        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
+        fullPath = os.path.join(fullPath, filename)
+        cv2.imwrite(fullPath, vis)
+
     #Pets
     rects = dog_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
                                          flags=cv2.CASCADE_SCALE_IMAGE)
