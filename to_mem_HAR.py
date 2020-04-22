@@ -172,6 +172,8 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
+        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
+        fullPath = os.path.join(fullPath, filename)
         print("Human ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
         cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
@@ -203,7 +205,7 @@ while True:
             os.makedirs(fullPath)
         filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
         fullPath = os.path.join(fullPath, filename)
-        print("Human ! ", x1, y1, x2, y2)
+        print("Pets ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
         cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
