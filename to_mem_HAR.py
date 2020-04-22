@@ -176,17 +176,19 @@ while True:
         fullPath = os.path.join(fullPath, filename)
         print("Human ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
+        # img_car = frame[y1:y2, x1:x2]
+        # roi = gray[y1:y2, x1:x2]
+        # vis_roi = vis[y1:y2, x1:x2]
+        # draw_rects(vis, rects, (0, 255, 0))
+        # cv2.imwrite(filename, img_car)
         cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename,))
         id_of_new_row = cur.fetchone()[0]
         cur.execute(sql_insert_rects, (id_of_new_row, x1, x2, y1, y2,))
         conn.commit()
         cur.close()
-        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
-        fullPath = os.path.join(fullPath, filename)
-        cv2.imwrite(fullPath, vis)
-
     #Pets
     rects = dog_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(130, 230),
                                          flags=cv2.CASCADE_SCALE_IMAGE)
@@ -207,6 +209,11 @@ while True:
         fullPath = os.path.join(fullPath, filename)
         print("Pets ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
+        # img_car = frame[y1:y2, x1:x2]
+        # roi = gray[y1:y2, x1:x2]
+        # vis_roi = vis[y1:y2, x1:x2]
+        # draw_rects(vis, rects, (0, 255, 0))
+        # cv2.imwrite(filename, img_car)
         cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
