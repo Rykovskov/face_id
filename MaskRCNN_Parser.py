@@ -107,7 +107,7 @@ sql_select_actions = """select id_actions, dt_actions, patch_to_pic from actions
 #sql_insert_rects = """insert into rectangles (id_actions, x1, x2, y1, y2) values (%s, %s, %s, %s, %s);"""
 
 cur = conn.cursor()
-cur.execute(sql_insert_actions, (now, fullPath, filename, ))
+cur.execute(sql_select_actions)
 records = cur.fetchall()
 if len(records) == 0:
     cur.close()
