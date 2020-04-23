@@ -28,6 +28,7 @@ def addapt_numpy_int64(numpy_int64):
 register_adapter(np.float64, addapt_numpy_float64)
 register_adapter(np.int64, addapt_numpy_int64)
 
+APP_DIR = Path("/home/max/face_id")
 ROOT_DIR = Path("/home/max/base")
 CAR_DIR = os.path.join(ROOT_DIR, "cars")
 HUMAN_DIR = os.path.join(ROOT_DIR, "humans")
@@ -38,9 +39,9 @@ size_pic_with = 1920
 size_pic_high = 1080
 
 # Directory to save logs and trained model
-MODEL_DIR = os.path.join(ROOT_DIR, "logs")
+MODEL_DIR = os.path.join(APP_DIR, "logs")
 # Local path to trained weights file
-COCO_MODEL_PATH = os.path.join(ROOT_DIR, "mask_rcnn_coco.h5")
+COCO_MODEL_PATH = os.path.join(APP_DIR, "mask_rcnn_coco.h5")
 # Download COCO trained weights from Releases if needed
 if not os.path.exists(COCO_MODEL_PATH):
     mrcnn.utils.download_trained_weights(COCO_MODEL_PATH)
