@@ -115,8 +115,10 @@ if len(records) == 0:
     exit()
 
 for (id_record, dt, path_to_file) in records:
+    print(id_record, dt, path_to_file)
     if os.path.isfile(path_to_file):
         #File exist
+        print("!!!")
         frame = cv2.imread(path_to_file)
         # Run the image through the Mask R-CNN model to get results.
         results = model.detect([frame], verbose=0)
@@ -133,7 +135,7 @@ for (id_record, dt, path_to_file) in records:
         for box in car_boxes:
             print("Car: ", box)
             y1, x1, y2, x2 = box
-            y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
+            #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
             # Make directory if not exist
             fullPath = os.path.join(CAR_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
@@ -146,7 +148,7 @@ for (id_record, dt, path_to_file) in records:
         for box in human_boxes:
             print("Human: ", box)
             y1, x1, y2, x2 = box
-            y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
+            #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
             # Make directory if not exist
             fullPath = os.path.join(HUMAN_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
@@ -159,7 +161,7 @@ for (id_record, dt, path_to_file) in records:
         for box in pet_boxes:
             print("Pet: ", box)
             y1, x1, y2, x2 = box
-            y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
+            #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
             # Make directory if not exist
             fullPath = os.path.join(HUMAN_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
