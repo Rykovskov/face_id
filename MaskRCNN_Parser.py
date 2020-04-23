@@ -37,6 +37,7 @@ delta_size_x = 40
 delta_size_y = 90
 size_pic_with = 1920
 size_pic_high = 1080
+find_object = 0
 
 # Directory to save logs and trained model
 MODEL_DIR = os.path.join(APP_DIR, "logs")
@@ -103,8 +104,15 @@ model.load_weights(COCO_MODEL_PATH, by_name=True)
 
 conn = psycopg2.connect(dbname='trafik', user='max', password='tv60hu02', host='localhost')
 sql_select_actions = """select id_actions, dt_actions, patch_to_pic from actions where MaskRCNN=false order by dt_actions;"""
-#sql_insert_actions = """insert into actions (dt_actions, patch_to_pic, name_pic) values (%s, %s, %s)  RETURNING id_actions;"""
-#sql_insert_rects = """insert into rectangles (id_actions, x1, x2, y1, y2) values (%s, %s, %s, %s, %s);"""
+
+sql_update_actions_MaskRCNN = """update actions set MaskRCNN=true where id_actions=%s"""
+sql_update_actions_car = """update actions set Detect_car=true where id_actions=%s"""
+sql_update_actions_human = """update actions set Detect_human=true where id_actions=%s"""
+sql_update_actions_pet = """update actions set Detect_pet=true where id_actions=%s"""
+
+sql_insert_car = """insert into cars (id_actions, patch_to_pic) values (%s, %s);"""
+sql_insert_human = """insert into humans (id_actions, patch_to_pic) values (%s, %s);"""
+sql_insert_pet = """insert into pets (id_actions, patch_to_pic) values (%s, %s);"""
 
 cur = conn.cursor()
 cur.execute(sql_select_actions)
@@ -115,19 +123,27 @@ if len(records) == 0:
     exit()
 
 for (id_record, dt, path_to_file) in records:
-    print(id_record, dt, path_to_file)
     if os.path.isfile(path_to_file):
         #File exist
-        print("!!!")
         frame = cv2.imread(path_to_file)
+        find_object = 0
         # Run the image through the Mask R-CNN model to get results.
         results = model.detect([frame], verbose=0)
         t2 = time.time()
         # print("Time detect all object:", (t2 - t1))
         r = results[0]
         car_boxes = get_car_boxes(r['rois'], r['class_ids'])
+        if len(car_boxes) > 0:
+            find_object = 1
         human_boxes = get_human_boxes(r['rois'], r['class_ids'])
+        if len(human_boxes) > 0:
+            find_object = 1
         pet_boxes = get_pet_boxes(r['rois'], r['class_ids'])
+        if len(pet_boxes) > 0:
+            find_object = 1
+        if find_object:
+            cur.execute(sql_update_actions_MaskRCNN, (id_record,))
+            conn.commit()
         # Draw each box on the frame
         year_str = dt.strftime("%Y")
         month_str = dt.strftime("%m")
@@ -145,6 +161,9 @@ for (id_record, dt, path_to_file) in records:
             img_car = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
             cv2.imwrite(fullPath, img_car)
+            cur.execute(sql_update_actions_car, (id_record,))
+            cur.execute(sql_insert_car, (id_record, fullPath))
+            conn.commit()
         for box in human_boxes:
             print("Human: ", box)
             y1, x1, y2, x2 = box
@@ -158,6 +177,9 @@ for (id_record, dt, path_to_file) in records:
             img_human = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
             cv2.imwrite(fullPath, img_human)
+            cur.execute(sql_update_actions_human, (id_record,))
+            cur.execute(sql_insert_human, (id_record, fullPath))
+            conn.commit()
         for box in pet_boxes:
             print("Pet: ", box)
             y1, x1, y2, x2 = box
@@ -171,6 +193,9 @@ for (id_record, dt, path_to_file) in records:
             img_pet = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
             cv2.imwrite(fullPath, img_pet)
+            cur.execute(sql_update_actions_pet, (id_record,))
+            cur.execute(sql_insert_pet, (id_record, fullPath))
+            conn.commit()
 
 cur.close()
 conn.close()
