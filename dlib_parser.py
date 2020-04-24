@@ -95,7 +95,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             s_images.append(frame[y_face1:y_face2, x_face1:x_face2])
         num_faces = len(dets)
         if num_faces > 0:
-            print("Find face! ", num_faces)
+            print("Find face! ", num_faces, dt)
             cur.execute(sql_update_humans_dlib, (id_humans,))
             conn.commit()
             faces = dlib.full_object_detections()
@@ -119,9 +119,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                     fullPath = os.path.join(fullPath, filename)
                     dets1 = detector(image, 1)
                     for k1, d1 in enumerate(dets1):
-                        print("222")
                         shape1 = sp(image, d1)
-                    cv2.imwrite("/home/max/base/1.jpg", image)
                     face_descriptor1 = facerec.compute_face_descriptor(image, shape1)
                     out_dump1 = pickle.dumps(face_descriptor1, 1)
                     cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
