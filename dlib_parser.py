@@ -50,12 +50,13 @@ ROOT_DIR = Path("/home/max/base")
 APP_DIR = Path("/home/max/face_id")
 FACES_DIR = os.path.join(ROOT_DIR, "faces")
 
-cnn_model_path = os.path.join(APP_DIR,"dlib_face_recognition_resnet_model_v1.dat")
+cnn_model_path = os.path.join(APP_DIR, "mmod_human_face_detector.dat")
 cnn_face_detector = dlib.cnn_face_detection_model_v1(cnn_model_path)
+facerec = dlib.face_recognition_model_v1(cnn_model_path)
 #predictor_path = os.path.join(APP_DIR, "shape_predictor_68_face_landmarks.dat")
 predictor_path = os.path.join(APP_DIR, "shape_predictor_5_face_landmarks.dat")
 model_path = os.path.join(APP_DIR, "dlib_face_recognition_resnet_model_v1.dat")
-facerec = dlib.face_recognition_model_v1(model_path)
+
 sp = dlib.shape_predictor(predictor_path)
 detector = dlib.get_frontal_face_detector()
 
