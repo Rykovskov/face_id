@@ -50,6 +50,8 @@ ROOT_DIR = Path("/home/max/base")
 APP_DIR = Path("/home/max/face_id")
 FACES_DIR = os.path.join(ROOT_DIR, "faces")
 
+cnn_model_path = os.path.join(APP_DIR,"dlib_face_recognition_resnet_model_v1.dat")
+cnn_face_detector = dlib.cnn_face_detection_model_v1(cnn_model_path)
 #predictor_path = os.path.join(APP_DIR, "shape_predictor_68_face_landmarks.dat")
 predictor_path = os.path.join(APP_DIR, "shape_predictor_5_face_landmarks.dat")
 model_path = os.path.join(APP_DIR, "dlib_face_recognition_resnet_model_v1.dat")
@@ -79,7 +81,8 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         print("Date ------ ", dt)
         frame = cv2.imread(patch_to_pic)
         find_object = 0
-        dets = detector(frame, 1)
+        #dets = detector(frame, 1)
+        dets = cnn_face_detector(frame, 1)
         s_images = []
         for k, d in enumerate(dets):
             x_face1 = d.left() - 40
