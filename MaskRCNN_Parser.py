@@ -12,7 +12,6 @@ import mrcnn.config
 import mrcnn.utils
 from pathlib import Path
 from mrcnn.model import MaskRCNN
-import compare_pic
 import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
 
@@ -185,7 +184,7 @@ for (id_record, dt, path_to_file) in records:
             y1, x1, y2, x2 = box
             #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
             # Make directory if not exist
-            fullPath = os.path.join(HUMAN_DIR, year_str, month_str, day_str)
+            fullPath = os.path.join(PET_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
                 os.makedirs(fullPath)
             filename = dt.strftime("%H_%M_%S") + ".jpg"
