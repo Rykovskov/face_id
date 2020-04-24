@@ -85,10 +85,10 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         dets = cnn_face_detector(frame, 1)
         s_images = []
         for k, d in enumerate(dets):
-            x_face1 = d.left() - 40
-            x_face2 = d.right() + 40
-            y_face1 = d.top() - 60
-            y_face2 = d.bottom() + 60
+            x_face1 = d.rect.left() - 40
+            x_face2 = d.rect.right() + 40
+            y_face1 = d.rect.top() - 60
+            y_face2 = d.rect.bottom() + 60
             if x_face1 < 0:
                 x_face1 = 0
             if y_face1 < 0:
