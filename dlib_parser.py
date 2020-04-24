@@ -103,7 +103,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 faces.append(sp(frame, detection))
             # Get the aligned face images
             # Optionally:
-            images = dlib.get_face_chips(frame, faces, size=320, padding=0.25)
+            images = dlib.get_face_chips(frame, faces, size=640, padding=0.25)
             # images = dlib.get_face_chips(rgb_image, faces, size=640, padding=0.25)
             i = 0
             year_str = dt.strftime("%Y")
@@ -117,7 +117,6 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                         os.makedirs(fullPath)
                     filename = dt.strftime("%H_%M_%S") + ".jpg"
                     fullPath = os.path.join(fullPath, filename)
-                    img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                     dets1 = detector(image, 1)
                     for k1, d1 in enumerate(dets1):
                         print("222")
