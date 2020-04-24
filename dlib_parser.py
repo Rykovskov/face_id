@@ -75,6 +75,7 @@ if len(records) == 0:
     exit()
 for (id_humans, id_actions, dt, patch_to_pic) in records:
     if os.path.isfile(patch_to_pic):
+        print("Date ------ ", dt)
         frame = cv2.imread(patch_to_pic)
         find_object = 0
         dets = detector(frame, 1)
