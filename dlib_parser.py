@@ -100,43 +100,33 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             s_images.append(frame[y_face1:y_face2, x_face1:x_face2])
         num_faces = len(dets)
         if num_faces > 0:
-            print("Find face! ", num_faces, dt)
-            cur.execute(sql_update_humans_dlib, (id_humans,))
-            conn.commit()
-            faces = dlib.full_object_detections()
-            dets2 = detector(frame, 1)
-            for detection in dets2:
-                faces.append(sp(frame, detection))
-            # Get the aligned face images
-            # Optionally:
-            images = dlib.get_face_chips(frame, faces, size=640, padding=0.25)
-            # images = dlib.get_face_chips(rgb_image, faces, size=640, padding=0.25)
-            i = 0
             year_str = dt.strftime("%Y")
             month_str = dt.strftime("%m")
             day_str = dt.strftime("%d")
-            j = 0
-            for image in images:
-                j = j + 1
-                try:
-                    # Make directory if not exist
-                    fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
-                    if not os.path.exists(fullPath):
-                        os.makedirs(fullPath)
-                    filename = dt.strftime("%H_%M_%S_%f_") + str(j) + ".jpg"
-                    fullPath = os.path.join(fullPath, filename)
-                    dets1 = detector(image, 1)
-                    for k1, d1 in enumerate(dets1):
-                        shape1 = sp(image, d1)
-                    face_descriptor1 = facerec.compute_face_descriptor(image, shape1)
-                    out_dump1 = pickle.dumps(face_descriptor1, 1)
-                    cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
-                    cv2.imwrite(fullPath, s_images[i])
-                    conn.commit()
-                    print("Save image complete!!")
-                except psycopg2.Error as e:
-                    print(e.pgerror)
-                    print(e.diag.message_detail)
-                    print('Ошибка:\n', traceback.format_exc())
+            print("Find face! ", num_faces, dt)
+            i = 0
+            for img in s_images:
                 i = i + 1
+                dets = detector(img, 1)
+                for k, d in enumerate(dets):
+                    shape = sp(img, d)
+                    face_descriptor = facerec.compute_face_descriptor(img, shape)
+                out_dump1 = pickle.dumps(face_descriptor, 1)
+                print(face_descriptor)
+                #cur.execute(sql_update_humans_dlib, (id_humans,))
+                #conn.commit()
+                fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
+                if not os.path.exists(fullPath):
+                    os.makedirs(fullPath)
+                filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
+                fullPath = os.path.join(fullPath, filename)
+                #cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
+                #cv2.imwrite(fullPath, img)
+                #conn.commit()
+                print("Save image complete!!")
+                #except psycopg2.Error as e:
+                #    print(e.pgerror)
+                #    print(e.diag.message_detail)
+                #    print('Ошибка:\n', traceback.format_exc())
+                #i = i + 1
 
