@@ -95,7 +95,7 @@ img_human_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 img_pet_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 
 while True:
-    #time.sleep(0.2)
+    time.sleep(0.2)
     ret, frame = vcap.read()
     if frame is None:
         counter_broken_frame = counter_broken_frame + 1
@@ -115,7 +115,6 @@ while True:
         continue
     font = cv2.FONT_HERSHEY_DUPLEX
     #Car
-    cv2.imwrite("/home/max/base/2.jpg", gray)
     rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
          rects = []
