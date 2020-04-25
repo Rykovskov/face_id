@@ -95,7 +95,7 @@ img_human_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 img_pet_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 
 while True:
-    time.sleep(0.2)
+    #time.sleep(0.2)
     ret, frame = vcap.read()
     if frame is None:
         counter_broken_frame = counter_broken_frame + 1
