@@ -115,8 +115,8 @@ while True:
         continue
     font = cv2.FONT_HERSHEY_DUPLEX
     #Car
-    cv2.imwrite("/home/max/base/2.jpg", frame)
-    rects = car_cascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
+    cv2.imwrite("/home/max/base/2.jpg", gray)
+    rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
     if len(rects) == 0:
          rects = []
     else:
