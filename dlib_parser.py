@@ -111,6 +111,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 for k, d in enumerate(dets):
                     shape = sp(img, d)
                     face_descriptor = facerec.compute_face_descriptor(img, shape)
+                cv2.imwrite("/home/max/base/3.jpg", img)
                 out_dump1 = pickle.dumps(face_descriptor, 1)
                 print(face_descriptor)
                 #cur.execute(sql_update_humans_dlib, (id_humans,))
