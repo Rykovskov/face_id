@@ -95,6 +95,7 @@ img_human_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 img_pet_old = np.full((300, 400, 3), 130, dtype=np.uint8)
 
 while True:
+    time.sleep(0.2)
     ret, frame = vcap.read()
     if frame is None:
         counter_broken_frame = counter_broken_frame + 1
@@ -129,7 +130,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Car ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
@@ -172,7 +173,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Human ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
@@ -205,7 +206,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Pets ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
