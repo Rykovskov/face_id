@@ -82,7 +82,6 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         #print("Date ------ ", dt)
         frame = cv2.imread(patch_to_pic)
         find_object = 0
-        #dets = detector(frame, 1)
         dets = cnn_face_detector(frame, 1)
         s_images = []
         for k, d in enumerate(dets):
@@ -105,7 +104,8 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             cur.execute(sql_update_humans_dlib, (id_humans,))
             conn.commit()
             faces = dlib.full_object_detections()
-            for detection in dets:
+            dets2 = detector(frame, 1)
+            for detection in dets2:
                 faces.append(sp(frame, detection))
             # Get the aligned face images
             # Optionally:
