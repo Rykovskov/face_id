@@ -122,7 +122,9 @@ while True:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
     now = datetime.datetime.now()
+    i = 0
     for x1, y1, x2, y2 in rects:
+        i = i + 1
         # Make directory if not exist
         year_str = datetime.datetime.now().strftime("%Y")
         month_str = datetime.datetime.now().strftime("%m")
@@ -130,7 +132,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Car ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
@@ -165,7 +167,9 @@ while True:
     else:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
+    i = 0
     for x1, y1, x2, y2 in rects:
+        i = i + 1
         # Make directory if not exist
         year_str = datetime.datetime.now().strftime("%Y")
         month_str = datetime.datetime.now().strftime("%m")
@@ -173,7 +177,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Human ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)
@@ -198,7 +202,9 @@ while True:
     else:
         rects[:, 2:] += rects[:, :2]
     vis = frame.copy()
+    i = 0
     for x1, y1, x2, y2 in rects:
+        i = i + 1
         # Make directory if not exist
         year_str = datetime.datetime.now().strftime("%Y")
         month_str = datetime.datetime.now().strftime("%m")
@@ -206,7 +212,7 @@ while True:
         fullPath = os.path.join(ROOT_DIR, year_str, month_str, day_str)
         if not os.path.exists(fullPath):
             os.makedirs(fullPath)
-        filename = datetime.datetime.now().strftime("%H_%M_%S_%f") + ".jpg"
+        filename = datetime.datetime.now().strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
         fullPath = os.path.join(fullPath, filename)
         print("Pets ! ", x1, y1, x2, y2)
         (x1, y1, x2, y2) = normal_rect(x1, y1, x2, y2)

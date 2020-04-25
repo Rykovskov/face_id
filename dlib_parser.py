@@ -52,12 +52,13 @@ FACES_DIR = os.path.join(ROOT_DIR, "faces")
 
 cnn_model_path = os.path.join(APP_DIR, "mmod_human_face_detector.dat")
 cnn_face_detector = dlib.cnn_face_detection_model_v1(cnn_model_path)
-#predictor_path = os.path.join(APP_DIR, "shape_predictor_68_face_landmarks.dat")
-predictor_path = os.path.join(APP_DIR, "shape_predictor_5_face_landmarks.dat")
+predictor_path = os.path.join(APP_DIR, "shape_predictor_68_face_landmarks.dat")
+#predictor_path = os.path.join(APP_DIR, "shape_predictor_5_face_landmarks.dat")
 model_path = os.path.join(APP_DIR, "dlib_face_recognition_resnet_model_v1.dat")
 
 sp = dlib.shape_predictor(predictor_path)
 detector = dlib.get_frontal_face_detector()
+facerec = dlib.face_recognition_model_v1(model_path)
 
 conn = psycopg2.connect(dbname='trafik', user='max', password='tv60hu02', host='localhost')
 sql_select_humans = """select id_humans, actions.id_actions, dt_actions, humans.patch_to_pic 
@@ -78,7 +79,7 @@ if len(records) == 0:
     exit()
 for (id_humans, id_actions, dt, patch_to_pic) in records:
     if os.path.isfile(patch_to_pic):
-        print("Date ------ ", dt)
+        #print("Date ------ ", dt)
         frame = cv2.imread(patch_to_pic)
         find_object = 0
         #dets = detector(frame, 1)
@@ -114,13 +115,15 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             year_str = dt.strftime("%Y")
             month_str = dt.strftime("%m")
             day_str = dt.strftime("%d")
+            j = 0
             for image in images:
+                j = j + 1
                 try:
                     # Make directory if not exist
                     fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
                     if not os.path.exists(fullPath):
                         os.makedirs(fullPath)
-                    filename = dt.strftime("%H_%M_%S") + ".jpg"
+                    filename = dt.strftime("%H_%M_%S_%f_") + str(j) + ".jpg"
                     fullPath = os.path.join(fullPath, filename)
                     dets1 = detector(image, 1)
                     for k1, d1 in enumerate(dets1):

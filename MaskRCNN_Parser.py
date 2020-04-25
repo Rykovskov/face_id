@@ -147,7 +147,9 @@ for (id_record, dt, path_to_file) in records:
         year_str = dt.strftime("%Y")
         month_str = dt.strftime("%m")
         day_str = dt.strftime("%d")
+        i = 0
         for box in car_boxes:
+            i = i + 1
             print("Car: ", box)
             y1, x1, y2, x2 = box
             #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
@@ -155,7 +157,7 @@ for (id_record, dt, path_to_file) in records:
             fullPath = os.path.join(CAR_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
                 os.makedirs(fullPath)
-            filename = dt.strftime("%H_%M_%S") + ".jpg"
+            filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
             # Save image to disk
             img_car = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
@@ -163,7 +165,9 @@ for (id_record, dt, path_to_file) in records:
             cur.execute(sql_update_actions_car, (id_record,))
             cur.execute(sql_insert_car, (id_record, fullPath))
             conn.commit()
+        i = 0
         for box in human_boxes:
+            i = i + 1
             print("Human: ", box)
             y1, x1, y2, x2 = box
             #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
@@ -171,7 +175,7 @@ for (id_record, dt, path_to_file) in records:
             fullPath = os.path.join(HUMAN_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
                 os.makedirs(fullPath)
-            filename = dt.strftime("%H_%M_%S") + ".jpg"
+            filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
             # Save image to disk
             img_human = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
@@ -179,7 +183,9 @@ for (id_record, dt, path_to_file) in records:
             cur.execute(sql_update_actions_human, (id_record,))
             cur.execute(sql_insert_human, (id_record, fullPath))
             conn.commit()
+        i = 0
         for box in pet_boxes:
+            i = i + 1
             print("Pet: ", box)
             y1, x1, y2, x2 = box
             #y1, x1, y2, x2 = normal_rect(y1, x1, y2, x2)
@@ -187,7 +193,7 @@ for (id_record, dt, path_to_file) in records:
             fullPath = os.path.join(PET_DIR, year_str, month_str, day_str)
             if not os.path.exists(fullPath):
                 os.makedirs(fullPath)
-            filename = dt.strftime("%H_%M_%S") + ".jpg"
+            filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
             # Save image to disk
             img_pet = frame[y1:y2, x1:x2]
             fullPath = os.path.join(fullPath, filename)
