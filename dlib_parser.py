@@ -83,7 +83,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 os.makedirs(fullPath)
             for k, d in enumerate(dets):
                 # Get the landmarks/parts for the face in box d.
-                shape = sp(img, d)
+                shape = sp(frame, d)
                 # Compute the 128D vector that describes the face in img identified by
                 # shape.
                 face_descriptor = facerec.compute_face_descriptor(img, shape)
