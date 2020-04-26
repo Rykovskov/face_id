@@ -108,6 +108,9 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             i = 0
             for img in s_images:
                 i = i + 1
+                fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
+                if not os.path.exists(fullPath):
+                    os.makedirs(fullPath)
                 filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
                 fullPath = os.path.join(fullPath, filename)
                 image_to_test = face_recognition.load_image_file(fullPath)
@@ -124,9 +127,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 print(face_descriptor)
                 #cur.execute(sql_update_humans_dlib, (id_humans,))
                 #conn.commit()
-                fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
-                if not os.path.exists(fullPath):
-                    os.makedirs(fullPath)
+
 
                 #cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
                 #cv2.imwrite(fullPath, img)
