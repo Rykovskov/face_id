@@ -82,13 +82,25 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             if not os.path.exists(fullPath):
                 os.makedirs(fullPath)
             for k, d in enumerate(dets):
-                # Get the landmarks/parts for the face in box d.
+                x_face1 = d.left() - 40
+                x_face2 = d.right() + 40
+                y_face1 = d.top() - 40
+                y_face2 = d.bottom() + 40
+                if x_face1 < 0:
+                    x_face1 = 0
+                if y_face1 < 0:
+                    y_face1 = 0
+                if x_face2 > 1920:
+                    x_face2 = 1920
+                if y_face2 > 1080:
+                    y_face2 = 1080
+                    # Get the landmarks/parts for the face in box d.
                 shape = sp(frame, d)
                 # Compute the 128D vector that describes the face in img identified by
                 # shape.
                 face_descriptor = facerec.compute_face_descriptor(frame, shape)
                 descriptors.append(face_descriptor)
-                s_images.append(frame[d.top():d.bottom(), d.left():d.right()])
+                s_images.append(frame[y_face1:y_face2, x_face1:x_face2])
             i = 0
             for img in s_images:
                 filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
@@ -105,7 +117,19 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         dets_cnn = cnn_face_detector(frame, 1)
         s_images = []
         for k, d in enumerate(dets_cnn):
-            s_images.append(frame[d.rect.top():d.rect.bottom(), d.rect.left():d.rect.right()])
+            x_face1 = d.rect.left() - 40
+            x_face2 = d.rect.right() + 40
+            y_face1 = d.rect.top() - 40
+            y_face2 = d.rect.bottom() + 40
+            if x_face1 < 0:
+                x_face1 = 0
+            if y_face1 < 0:
+                y_face1 = 0
+            if x_face2 > 1920:
+                x_face2 = 1920
+            if y_face2 > 1080:
+                y_face2 = 1080
+            s_images.append(frame[y_face1:y_face2, x_face1:x_face2])
         num_faces = len(dets)
         if num_faces > 0:
             year_str = dt.strftime("%Y")
