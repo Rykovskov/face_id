@@ -115,7 +115,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 fullPath = os.path.join(fullPath, filename)
                 cv2.imwrite(fullPath, img)
                 image_to_test = face_recognition.load_image_file(fullPath)
-                image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+                image_to_test_encoding = face_recognition.face_encodings(image_to_test)
                 print(image_to_test_encoding)
 
                 dets = detector(img, 1)
