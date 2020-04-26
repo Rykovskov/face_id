@@ -86,7 +86,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 shape = sp(frame, d)
                 # Compute the 128D vector that describes the face in img identified by
                 # shape.
-                face_descriptor = facerec.compute_face_descriptor(img, shape)
+                face_descriptor = facerec.compute_face_descriptor(frame, shape)
                 descriptors.append(face_descriptor)
                 s_images.append(frame[d.top():d.bottom(), d.left():d.right()])
             i = 0
