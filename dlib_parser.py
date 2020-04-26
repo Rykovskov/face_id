@@ -13,7 +13,6 @@ import _pickle as pickle
 from scipy.spatial import distance
 import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
-import face_recognition
 
 
 def addapt_numpy_float64(numpy_float64):
@@ -22,29 +21,6 @@ def addapt_numpy_float64(numpy_float64):
 
 def addapt_numpy_int64(numpy_int64):
     return AsIs(numpy_int64)
-
-
-def pickle_keypoints(keypoints, descriptors):
-    i = 0
-    temp_array = []
-    for point in keypoints:
-        temp = (point.pt, point.size, point.angle, point.response, point.octave,
-                point.class_id, descriptors[i])
-        ++i
-        temp_array.append(temp)
-    return temp_array
-
-
-def unpickle_keypoints(array):
-    keypoints = []
-    descriptors = []
-    for point in array:
-        temp_feature = cv2.KeyPoint(x=point[0][0], y=point[0][1], _size=point[1], _angle=point[2], _response=point[3],
-                                    _octave=point[4], _class_id=point[5])
-        temp_descriptor = point[6]
-        keypoints.append(temp_feature)
-        descriptors.append(temp_descriptor)
-    return keypoints, np.array(descriptors)
 
 
 ROOT_DIR = Path("/home/max/base")
@@ -67,7 +43,7 @@ sql_select_humans = """select id_humans, actions.id_actions, dt_actions, humans.
                         left join actions on actions.id_actions=humans.id_actions 
                         where dlib_parser=false"""
 
-sql_insert_face = """insert into faces (id_actions, id_humans, patch_to_pic, keypoints) values (%s, %s, %s, %s);"""
+sql_insert_face = """insert into faces (id_actions, id_humans, patch_to_pic) values (%s, %s, %s);"""
 
 sql_update_humans_dlib = """update humans set dlib_parser=true where id_humans=%s"""
 
@@ -80,7 +56,6 @@ if len(records) == 0:
     exit()
 for (id_humans, id_actions, dt, patch_to_pic) in records:
     if os.path.isfile(patch_to_pic):
-        #print("Date ------ ", dt)
         frame = cv2.imread(patch_to_pic)
         find_object = 0
         dets = cnn_face_detector(frame, 1)
@@ -113,30 +88,9 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                     os.makedirs(fullPath)
                 filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
                 fullPath = os.path.join(fullPath, filename)
+                cur.execute(sql_update_humans_dlib, (id_humans,))
+                conn.commit()
+                cur.execute(sql_insert_face, (id_actions, id_humans, fullPath))
                 cv2.imwrite(fullPath, img)
-                image_to_test = face_recognition.load_image_file(fullPath)
-                image_to_test_encoding = face_recognition.face_encodings(image_to_test)
-                print(image_to_test_encoding)
-
-                dets = detector(img, 1)
-                print("dets ", len(dets))
-                for k, d in enumerate(dets):
-                    shape = sp(img, d)
-                    face_descriptor = facerec.compute_face_descriptor(img, shape)
-
-                out_dump1 = pickle.dumps(face_descriptor, 1)
-                print(face_descriptor)
-                #cur.execute(sql_update_humans_dlib, (id_humans,))
-                #conn.commit()
-
-
-                #cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
-                #cv2.imwrite(fullPath, img)
-                #conn.commit()
-                print("Save image complete!!")
-                #except psycopg2.Error as e:
-                #    print(e.pgerror)
-                #    print(e.diag.message_detail)
-                #    print('Ошибка:\n', traceback.format_exc())
-                #i = i + 1
+                conn.commit()
 
