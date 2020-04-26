@@ -108,6 +108,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             for img in s_images:
                 i = i + 1
                 dets = detector(img, 1)
+                print("dets ", len(dets))
                 for k, d in enumerate(dets):
                     shape = sp(img, d)
                     face_descriptor = facerec.compute_face_descriptor(img, shape)
