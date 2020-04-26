@@ -116,7 +116,6 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         #CNN Detector
         dets_cnn = cnn_face_detector(frame, 1)
         s_images = []
-        print(len(dets_cnn))
         for k, d in enumerate(dets_cnn):
             x_face1 = d.rect.left() - 40
             x_face2 = d.rect.right() + 40
@@ -131,12 +130,12 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             if y_face2 > 1080:
                 y_face2 = 1080
             s_images.append(frame[y_face1:y_face2, x_face1:x_face2])
-        num_faces = len(dets)
+        num_faces = len(dets_cnn)
         if num_faces > 0:
             year_str = dt.strftime("%Y")
             month_str = dt.strftime("%m")
             day_str = dt.strftime("%d")
-            print("Find face! ", num_faces, dt)
+            #print("Find face! ", num_faces, dt)
             i = 0
             for img in s_images:
                 i = i + 1
