@@ -13,6 +13,7 @@ import _pickle as pickle
 from scipy.spatial import distance
 import psycopg2
 from psycopg2.extensions import register_adapter, AsIs
+import face_recognition
 
 
 def addapt_numpy_float64(numpy_float64):
@@ -107,6 +108,12 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
             i = 0
             for img in s_images:
                 i = i + 1
+                filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
+                fullPath = os.path.join(fullPath, filename)
+                image_to_test = face_recognition.load_image_file(fullPath)
+                image_to_test_encoding = face_recognition.face_encodings(image_to_test)[0]
+                print(image_to_test_encoding)
+
                 dets = detector(img, 1)
                 print("dets ", len(dets))
                 for k, d in enumerate(dets):
@@ -120,8 +127,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 fullPath = os.path.join(FACES_DIR, year_str, month_str, day_str)
                 if not os.path.exists(fullPath):
                     os.makedirs(fullPath)
-                filename = dt.strftime("%H_%M_%S_%f_") + str(i) + ".jpg"
-                fullPath = os.path.join(fullPath, filename)
+
                 #cur.execute(sql_insert_face, (id_actions, id_humans, fullPath, psycopg2.Binary(out_dump1)))
                 #cv2.imwrite(fullPath, img)
                 #conn.commit()
