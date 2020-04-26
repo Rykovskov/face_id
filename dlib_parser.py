@@ -116,6 +116,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
         #CNN Detector
         dets_cnn = cnn_face_detector(frame, 1)
         s_images = []
+        print(len(dets_cnn))
         for k, d in enumerate(dets_cnn):
             x_face1 = d.rect.left() - 40
             x_face2 = d.rect.right() + 40
