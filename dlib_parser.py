@@ -113,7 +113,7 @@ for (id_humans, id_actions, dt, patch_to_pic) in records:
                 conn.commit()
                 i = i + 1
             continue
-        #CNN Detector
+        #CNN Detector 34
         dets_cnn = cnn_face_detector(frame, 1)
         s_images = []
         for k, d in enumerate(dets_cnn):
