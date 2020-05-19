@@ -109,10 +109,11 @@ while True:
     t1 = time.time()
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
-    fm = variance_of_laplacian(gray)
+    fm = round(variance_of_laplacian(gray), 2)
     if fm > 19000.00:
         # Skip unfocused images
         continue
+
     font = cv2.FONT_HERSHEY_DUPLEX
     #Car
     rects = car_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=4, minSize=(330, 330), flags=cv2.CASCADE_SCALE_IMAGE)
@@ -141,7 +142,11 @@ while True:
         #vis_roi = vis[y1:y2, x1:x2]
         #draw_rects(vis, rects, (0, 255, 0))
         #cv2.imwrite(filename, img_car)
-        cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        # Compare pic with befor frame/
+        dst = compare_pic.Get_Difference(frame, img_car_old)
+        img_car_old = frame
+        cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename, ))
@@ -186,7 +191,10 @@ while True:
         # vis_roi = vis[y1:y2, x1:x2]
         # draw_rects(vis, rects, (0, 255, 0))
         # cv2.imwrite(filename, img_car)
-        cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        dst = compare_pic.Get_Difference(frame, img_human_old)
+        img_human_old = frame
+        cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename,))
@@ -221,7 +229,10 @@ while True:
         # vis_roi = vis[y1:y2, x1:x2]
         # draw_rects(vis, rects, (0, 255, 0))
         # cv2.imwrite(filename, img_car)
-        cv2.putText(vis, str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        dst = compare_pic.Get_Difference(frame, img_pet_old)
+        img_pet_old = frame
+        cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename,))
