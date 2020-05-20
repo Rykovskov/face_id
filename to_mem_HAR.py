@@ -145,8 +145,11 @@ while True:
         # Compare pic with befor frame/
         dst = compare_pic.Get_Difference(frame, img_car_old)
         img_car_old = frame
-        cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
-        cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        # Skip frame
+        if dst > 0.95:
+            continue
+        cv2.putText(vis, "Satur: " + str(fm), (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
+        cv2.putText(vis, "Distance: " + str(dst), (100, 180), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
         cur = conn.cursor()
         cur.execute(sql_insert_actions, (now, fullPath, filename, ))
@@ -193,6 +196,9 @@ while True:
         # cv2.imwrite(filename, img_car)
         dst = compare_pic.Get_Difference(frame, img_human_old)
         img_human_old = frame
+        # Skip similar frame
+        if dst > 0.95:
+            continue
         cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
@@ -231,6 +237,9 @@ while True:
         # cv2.imwrite(filename, img_car)
         dst = compare_pic.Get_Difference(frame, img_pet_old)
         img_pet_old = frame
+        # Skip similar frame
+        if dst > 0.95:
+            continue
         cv2.putText(vis, "Satur: " + str(fm), (100, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.putText(vis, "Distance: " + str(dst), (100, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, 255)
         cv2.imwrite(fullPath, vis)
